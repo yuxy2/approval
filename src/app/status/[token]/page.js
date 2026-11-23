@@ -140,31 +140,31 @@ export default function StatusCheckPage({ params }) {
   return (
     <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-slate-900">
       {/* Back Link & Action Bar */}
-      <div className="mb-6 flex justify-between items-center no-print">
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 no-print">
         <Link href="/" className="text-xs text-slate-500 hover:text-[#8B1A1A] flex items-center gap-1.5 transition">
           ← Kembali ke Dashboard
         </Link>
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-wrap gap-2.5 items-center w-full sm:w-auto">
           {requestData.status === 'APPROVED' && (
             <button
               onClick={() => window.print()}
-              className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm cursor-pointer flex items-center gap-1.5"
+              className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm cursor-pointer flex items-center gap-1.5 w-full sm:w-auto justify-center"
             >
               🖨️ Cetak Dokumen PDF Resmi
             </button>
           )}
           {requestData.status === 'PENDING_PM' && role === 'PM' && (
-            <Link href={`/review/${token}`} className="text-xs bg-[#8B1A1A] hover:bg-[#C0392B] text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm">
+            <Link href={`/review/${token}`} className="text-xs bg-[#8B1A1A] hover:bg-[#C0392B] text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm w-full sm:w-auto text-center">
               Buka Panel Penilaian PM →
             </Link>
           )}
           {requestData.status === 'PENDING_CLIENT' && role === 'Client' && (
-            <Link href={`/approve/${token}`} className="text-xs bg-[#8B1A1A] hover:bg-[#C0392B] text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm">
+            <Link href={`/approve/${token}`} className="text-xs bg-[#8B1A1A] hover:bg-[#C0392B] text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition shadow-sm w-full sm:w-auto text-center">
               Buka Panel Persetujuan Klien →
             </Link>
           )}
           {requestData.status === 'REJECTED_TO_SUBMITTER' && (
-            <Link href={`/new?revisionId=${requestData.id}`} className="text-xs bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition">
+            <Link href={`/new?revisionId=${requestData.id}`} className="text-xs bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-lg font-bold uppercase tracking-wider transition w-full sm:w-auto text-center">
               Perbaiki Formulir Pengajuan →
             </Link>
           )}
@@ -175,7 +175,7 @@ export default function StatusCheckPage({ params }) {
       <div className="space-y-8">
         
         {/* 1. Live Status Card (no-print) */}
-        <div className="glass-panel-glow p-6 rounded-xl border border-slate-205 bg-[#fafafa] text-center no-print">
+        <div className="glass-panel-glow p-4 sm:p-6 rounded-xl border border-slate-205 bg-[#fafafa] text-center no-print">
           <span className="text-[10px] text-slate-500 uppercase tracking-widest block mb-2 font-bold">Status Terkini</span>
           <span className={`inline-flex items-center px-4 py-1.5 rounded text-sm font-bold border ${statusConfig.color}`}>
             {statusConfig.badge}
@@ -186,16 +186,16 @@ export default function StatusCheckPage({ params }) {
         </div>
 
         {/* 2. Main Details Summary Card (printable-card) */}
-        <div className="printable-card glass-panel-glow p-8 rounded-xl border border-slate-200 bg-[#fafafa] space-y-8 shadow-sm">
+        <div className="printable-card glass-panel-glow p-4 sm:p-8 rounded-xl border border-slate-200 bg-[#fafafa] space-y-6 sm:space-y-8 shadow-sm">
           {/* Corporate Document Header */}
-          <div className="bg-[#e4dfdf] px-8 py-6 flex flex-col md:flex-row print:flex-row md:items-start print:items-center justify-between gap-8 print:gap-4 border-b border-slate-350 -mx-8 -mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-8">
+          <div className="bg-[#e4dfdf] px-4 sm:px-8 py-5 sm:py-6 flex flex-col md:flex-row print:flex-row items-center md:items-start print:items-center justify-between gap-4 sm:gap-8 border-b border-slate-350 -mx-4 -mt-4 sm:-mx-8 sm:-mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-6 sm:mb-8 text-center md:text-right">
             {/* Column 1: Logo */}
             <div className="flex-shrink-0 flex justify-center md:justify-start print:justify-start md:w-56 print:w-auto pt-1">
-              <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-12 print:h-9 object-contain" />
+              <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-9 sm:h-12 print:h-9 object-contain" />
             </div>
             {/* Column 2: Title */}
-            <div className="flex-1 text-right print:text-right">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
+            <div className="flex-1 text-center md:text-right print:text-right">
+              <h1 className="text-xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.15em] sm:tracking-[0.3em] md:tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
                 Permohonan Variasi
               </h1>
             </div>

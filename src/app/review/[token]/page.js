@@ -186,7 +186,7 @@ export default function PMReviewPage({ params }) {
   return (
     <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-slate-900">
       {/* Navigation */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <Link href="/" className="text-xs text-slate-500 hover:text-[#8B1A1A] flex items-center gap-1.5 transition">
           ← Kembali ke Dashboard
         </Link>
@@ -195,16 +195,16 @@ export default function PMReviewPage({ params }) {
         </Link>
       </div>
 
-      <div className="glass-panel-glow p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
+      <div className="glass-panel-glow p-4 sm:p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
         {/* Corporate Document Header */}
-        <div className="bg-[#e4dfdf] px-8 py-6 flex flex-col md:flex-row print:flex-row md:items-start print:items-center justify-between gap-8 print:gap-4 border-b border-slate-350 -mx-8 -mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-8">
+        <div className="bg-[#e4dfdf] px-4 sm:px-8 py-5 sm:py-6 flex flex-col md:flex-row print:flex-row items-center md:items-start print:items-center justify-between gap-4 sm:gap-8 border-b border-slate-350 -mx-4 -mt-4 sm:-mx-8 sm:-mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-6 sm:mb-8 text-center md:text-right">
           {/* Column 1: Logo */}
           <div className="flex-shrink-0 flex justify-center md:justify-start print:justify-start md:w-56 print:w-auto pt-1">
-            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-12 print:h-9 object-contain" />
+            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-9 sm:h-12 print:h-9 object-contain" />
           </div>
           {/* Column 2: Title */}
-          <div className="flex-1 text-right print:text-right">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
+          <div className="flex-1 text-center md:text-right print:text-right">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.15em] sm:tracking-[0.3em] md:tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
               Permohonan Variasi
             </h1>
           </div>
@@ -212,15 +212,15 @@ export default function PMReviewPage({ params }) {
 
         {/* Subtitle / Step Details & Badges */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-4 mb-6 gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-[10px] sm:text-[11px] text-slate-500 uppercase font-mono tracking-wider">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <p className="text-[10px] sm:text-[11px] text-slate-500 uppercase font-mono tracking-wider break-all">
               Lokasi Proyek: <span className="font-semibold text-slate-700">{requestData.project_address}</span>
             </p>
             <div className="text-[10px] bg-[#F5E8E8] text-[#8B1A1A] px-2.5 py-0.5 rounded border border-[#8B1A1A]/20 font-bold">
               {requestData.status === 'REJECTED_TO_PM' ? '🔄 Revisi ke PM' : '⏳ Menunggu Penilaian PM'}
             </div>
           </div>
-          <span className="text-[9px] sm:text-[10px] text-[#8B1A1A] bg-[#F5E8E8] px-2 py-0.5 rounded border border-[#8B1A1A]/20 font-semibold uppercase tracking-wider">
+          <span className="text-[9px] sm:text-[10px] text-[#8B1A1A] bg-[#F5E8E8] px-2 py-0.5 rounded border border-[#8B1A1A]/20 font-semibold uppercase tracking-wider leading-relaxed">
             Langkah 2: Peninjauan PM — Penilaian Biaya & Verifikasi Rinci
           </span>
         </div>
@@ -600,7 +600,7 @@ export default function PMReviewPage({ params }) {
                   <button
                     type="button"
                     onClick={() => setShowRejectModal(true)}
-                    className="bg-white border border-rose-200 text-rose-700 font-semibold px-4 py-2.5 rounded text-xs hover:bg-rose-50 active:scale-95 transition text-center"
+                    className="w-full sm:w-auto bg-white border border-rose-200 text-rose-700 font-semibold px-4 py-3 rounded-lg text-xs hover:bg-rose-50 active:scale-95 transition text-center cursor-pointer shadow-sm"
                   >
                     ⚠️ Minta Revisi ke Pemohon
                   </button>
@@ -609,7 +609,7 @@ export default function PMReviewPage({ params }) {
                     type="button"
                     onClick={() => handleAction('PM_APPROVE')}
                     disabled={submitting || !pmRepName || !clientEmail || (financialImpactType !== 'none' && !financialImpactAmount) || (scheduleImpactType !== 'none' && !scheduleImpactDays)}
-                    className="bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-bold px-6 py-2.5 rounded text-xs active:scale-95 transition disabled:opacity-50 text-center"
+                    className="w-full sm:w-auto bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-bold px-6 py-3 rounded-lg text-xs active:scale-95 transition disabled:opacity-50 text-center shadow-sm cursor-pointer"
                   >
                     {submitting ? 'Mengirimkan...' : 'Setujui & Kirim ke Klien ✓'}
                   </button>

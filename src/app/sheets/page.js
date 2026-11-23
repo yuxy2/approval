@@ -32,6 +32,7 @@ export default function SheetsDashboard() {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Reset page when filters or sorting change
   useEffect(() => {
@@ -260,16 +261,17 @@ export default function SheetsDashboard() {
   return (
     <div className="flex-1 flex flex-col w-full min-h-screen bg-slate-50">
       {/* Sticky Header / Navbar */}
-      <header className="border-b border-slate-200 bg-white/85 backdrop-blur-md sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-4">
-            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-9 object-contain" />
+      <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-7 sm:h-9 object-contain" />
           </Link>
 
-          <div className="flex items-center gap-4">
+          {/* Desktop Nav Actions */}
+          <div className="hidden md:flex items-center gap-4">
             {currentUser && (
-              <div className="flex items-center gap-4">
-                <div className="text-right hidden sm:block">
+              <>
+                <div className="text-right">
                   <div className="text-xs font-semibold text-slate-800">{currentUser.name}</div>
                   <div className="text-[10px] text-slate-400 font-light">{currentUser.email}</div>
                 </div>
@@ -291,10 +293,62 @@ export default function SheetsDashboard() {
                 >
                   Keluar
                 </button>
-              </div>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Nav Hamburger Toggle */}
+          <div className="flex md:hidden items-center gap-2">
+            {currentUser && (
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Buka Menu"
+                className="inline-flex items-center justify-center p-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:text-[#8B1A1A] hover:bg-slate-50 transition shadow-sm cursor-pointer"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {mobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
             )}
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && currentUser && (
+          <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-4 space-y-2.5 shadow-lg animate-fade-in">
+            <div className="px-2 py-1.5 border-b border-slate-100 mb-2">
+              <div className="text-xs font-bold text-slate-900">{currentUser.name}</div>
+              <div className="text-[11px] text-slate-500 font-light truncate">{currentUser.email}</div>
+            </div>
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-slate-700 hover:text-[#8B1A1A] p-2.5 rounded-lg hover:bg-red-50/50 transition border border-transparent hover:border-[#8B1A1A]/20"
+            >
+              <span>📋</span> Dashboard Utama
+            </Link>
+            <Link
+              href="/profile"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-slate-700 hover:text-[#8B1A1A] p-2.5 rounded-lg hover:bg-red-50/50 transition border border-transparent hover:border-[#8B1A1A]/20"
+            >
+              <span>👤</span> Profil Saya
+            </Link>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-rose-650 hover:text-rose-750 p-2.5 rounded-lg hover:bg-rose-50 transition border border-rose-100"
+            >
+              <span>🚪</span> Keluar
+            </button>
+          </div>
+        )}
       </header>
 
       <div className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-10 text-slate-900">

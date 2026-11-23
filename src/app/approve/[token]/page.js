@@ -295,7 +295,7 @@ export default function ClientSignOffPage({ params }) {
   return (
     <div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-slate-900">
       {/* Back Link */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <Link href="/" className="text-xs text-slate-500 hover:text-[#8B1A1A] flex items-center gap-1.5 transition">
           ← Kembali ke Dashboard
         </Link>
@@ -304,16 +304,16 @@ export default function ClientSignOffPage({ params }) {
         </Link>
       </div>
 
-      <div className="glass-panel-glow p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
+      <div className="glass-panel-glow p-4 sm:p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
         {/* Corporate Document Header */}
-        <div className="bg-[#e4dfdf] px-8 py-6 flex flex-col md:flex-row print:flex-row md:items-start print:items-center justify-between gap-8 print:gap-4 border-b border-slate-350 -mx-8 -mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-8">
+        <div className="bg-[#e4dfdf] px-4 sm:px-8 py-5 sm:py-6 flex flex-col md:flex-row print:flex-row items-center md:items-start print:items-center justify-between gap-4 sm:gap-8 border-b border-slate-350 -mx-4 -mt-4 sm:-mx-8 sm:-mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-6 sm:mb-8 text-center md:text-right">
           {/* Column 1: Logo */}
           <div className="flex-shrink-0 flex justify-center md:justify-start print:justify-start md:w-56 print:w-auto pt-1">
-            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-12 print:h-9 object-contain" />
+            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-9 sm:h-12 print:h-9 object-contain" />
           </div>
           {/* Column 2: Title */}
-          <div className="flex-1 text-right print:text-right">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
+          <div className="flex-1 text-center md:text-right print:text-right">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.15em] sm:tracking-[0.3em] md:tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
               Permohonan Variasi
             </h1>
           </div>
@@ -697,7 +697,8 @@ export default function ClientSignOffPage({ params }) {
                         onTouchStart={startDrawing}
                         onTouchMove={draw}
                         onTouchEnd={stopDrawing}
-                        className="signature-canvas w-full max-w-full bg-slate-50 cursor-crosshair"
+                        style={{ touchAction: 'none' }}
+                        className="signature-canvas w-full max-w-full bg-slate-50 cursor-crosshair touch-none"
                       />
                       {!hasSigned && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-xs text-slate-400 italic">
@@ -712,7 +713,7 @@ export default function ClientSignOffPage({ params }) {
                     <button
                       type="button"
                       onClick={() => setShowRejectModal(true)}
-                      className="flex-1 bg-white border border-rose-350 text-rose-700 font-bold py-3.5 px-6 h-12 rounded-lg text-sm hover:bg-rose-50 active:scale-95 transition text-center uppercase tracking-wider shadow-sm cursor-pointer"
+                      className="w-full sm:flex-1 bg-white border border-rose-350 text-rose-700 font-bold py-3.5 px-4 sm:px-6 h-auto sm:h-12 rounded-lg text-xs sm:text-sm hover:bg-rose-50 active:scale-95 transition text-center uppercase tracking-wider shadow-sm cursor-pointer"
                     >
                       ⚠️ Minta Penyesuaian Biaya / Lingkup
                     </button>
@@ -720,7 +721,7 @@ export default function ClientSignOffPage({ params }) {
                       type="button"
                       onClick={handleApprove}
                       disabled={submitting || !clientAgreement || !clientSignName || !hasSigned}
-                      className="flex-1 bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-bold py-3.5 px-6 h-12 rounded-lg text-sm active:scale-95 transition disabled:opacity-50 text-center uppercase tracking-wider shadow cursor-pointer"
+                      className="w-full sm:flex-1 bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-bold py-3.5 px-4 sm:px-6 h-auto sm:h-12 rounded-lg text-xs sm:text-sm active:scale-95 transition disabled:opacity-50 text-center uppercase tracking-wider shadow cursor-pointer"
                     >
                       {submitting ? 'Menyetujui...' : 'Tandatangani & Setujui Variasi ✓'}
                     </button>

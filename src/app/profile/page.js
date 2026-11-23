@@ -109,23 +109,23 @@ export default function ProfilePage() {
     <div className="flex-1 flex flex-col w-full bg-slate-50">
       {/* Sticky Header / Navbar */}
       <header className="border-b border-slate-200 bg-white/85 backdrop-blur-md sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-4">
-            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-9 object-contain" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-7 sm:h-9 object-contain" />
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {user && (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <Link
                   href="/"
-                  className="inline-flex items-center justify-center bg-white border border-slate-200 hover:border-slate-350 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded transition shadow-sm"
+                  className="inline-flex items-center justify-center bg-white border border-slate-200 hover:border-slate-350 text-slate-600 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded transition shadow-sm"
                 >
-                  ← Kembali ke Dashboard
+                  ← <span className="hidden sm:inline ml-1">Kembali ke</span> Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="inline-flex items-center justify-center bg-white border border-slate-200 hover:border-rose-200 hover:bg-rose-50 text-slate-600 hover:text-rose-700 text-xs font-semibold px-3 py-1.5 rounded transition shadow-sm cursor-pointer"
+                  className="inline-flex items-center justify-center bg-white border border-slate-200 hover:border-rose-200 hover:bg-rose-50 text-slate-600 hover:text-rose-700 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded transition shadow-sm cursor-pointer"
                 >
                   Keluar
                 </button>

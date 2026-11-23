@@ -224,16 +224,16 @@ function SubmitterFormContent() {
         </Link>
       </div>
 
-      <div className="glass-panel-glow p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
+      <div className="glass-panel-glow p-4 sm:p-8 rounded-xl border border-slate-200 bg-[#fafafa]">
         {/* Corporate Document Header */}
-        <div className="bg-[#e4dfdf] px-8 py-6 flex flex-col md:flex-row print:flex-row md:items-start print:items-center justify-between gap-8 print:gap-4 border-b border-slate-350 -mx-8 -mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-8">
+        <div className="bg-[#e4dfdf] px-4 sm:px-8 py-5 sm:py-6 flex flex-col md:flex-row print:flex-row items-center md:items-start print:items-center justify-between gap-4 sm:gap-8 border-b border-slate-350 -mx-4 -mt-4 sm:-mx-8 sm:-mt-8 rounded-t-xl print:mx-0 print:mt-0 print:rounded-none mb-6 sm:mb-8 text-center md:text-right">
           {/* Column 1: Logo */}
           <div className="flex-shrink-0 flex justify-center md:justify-start print:justify-start md:w-56 print:w-auto pt-1">
-            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-12 print:h-9 object-contain" />
+            <img src="/EE-wide.png" alt="Elevate Equity Logo" className="h-9 sm:h-12 print:h-9 object-contain" />
           </div>
           {/* Column 2: Title */}
-          <div className="flex-1 text-right print:text-right">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
+          <div className="flex-1 text-center md:text-right print:text-right">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-sans font-bold tracking-[0.15em] sm:tracking-[0.3em] md:tracking-[0.45em] text-slate-900 uppercase print:text-[32px] print:tracking-[0.28em] print:whitespace-nowrap">
               Permohonan Variasi
             </h1>
           </div>
@@ -241,10 +241,10 @@ function SubmitterFormContent() {
 
         {/* Subtitle / Step Details */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-4 mb-6 gap-3">
-          <p className="text-[10px] sm:text-[11px] text-slate-500 uppercase font-mono tracking-wider">
+          <p className="text-[10px] sm:text-[11px] text-slate-500 uppercase font-mono tracking-wider break-all">
             Lokasi Proyek: <span className="font-semibold text-slate-700">{projectAddress || "[Belum Diisi]"}</span>
           </p>
-          <span className="text-[9px] sm:text-[10px] text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-100 font-semibold uppercase tracking-wider">
+          <span className="text-[9px] sm:text-[10px] text-rose-800 bg-rose-50 px-2 py-0.5 rounded border border-rose-100 font-semibold uppercase tracking-wider leading-relaxed">
             Langkah 1: Pengajuan Variasi — Ajukan permohonan perubahan lingkup pekerjaan proyek
           </span>
         </div>
@@ -654,17 +654,17 @@ function SubmitterFormContent() {
           )}
 
           {/* Form Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-slate-200">
             <Link
               href="/"
-              className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 text-xs font-semibold px-5 py-2.5 rounded transition"
+              className="w-full sm:w-auto text-center justify-center bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 text-xs font-semibold px-5 py-2.5 rounded transition"
             >
               Batal
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-semibold px-6 py-2.5 rounded text-xs transition disabled:opacity-50"
+              className="w-full sm:w-auto text-center justify-center bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-semibold px-6 py-2.5 rounded text-xs transition disabled:opacity-50 shadow-sm cursor-pointer"
             >
               {loading ? 'Mengirimkan...' : isPrmInitiator ? 'Kirim Langsung ke Klien →' : revisionId ? 'Ajukan Ulang Permohonan →' : 'Kirim untuk Ditinjau PM →'}
             </button>

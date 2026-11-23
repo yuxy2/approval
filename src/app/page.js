@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [showResetPopup, setShowResetPopup] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -343,16 +344,17 @@ export default function Dashboard() {
   return (
     <div className="flex-1 flex flex-col w-full">
       {/* Sticky Header / Navbar */}
-      <header className="border-b border-slate-200 bg-white/85 backdrop-blur-md sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-9 object-contain" />
-          </div>
+      <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-7 sm:h-9 object-contain" />
+          </Link>
 
-          <div className="flex items-center gap-4">
+          {/* Desktop Nav Actions */}
+          <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <div className="flex items-center gap-4">
-                <div className="text-right hidden sm:block">
+              <>
+                <div className="text-right">
                   <div className="text-xs font-semibold text-slate-800">{user.name}</div>
                   <div className="text-[10px] text-slate-400 font-light">{user.email}</div>
                 </div>
@@ -387,36 +389,109 @@ export default function Dashboard() {
                 >
                   Keluar
                 </button>
-              </div>
+              </>
             ) : (
               <div className="h-6 w-24 bg-slate-100 animate-pulse rounded"></div>
             )}
           </div>
+
+          {/* Mobile Nav Hamburger Toggle */}
+          <div className="flex md:hidden items-center gap-2">
+            {user && (
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Buka Menu"
+                className="relative inline-flex items-center justify-center p-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:text-[#8B1A1A] hover:bg-slate-50 transition shadow-sm cursor-pointer"
+              >
+                {pendingResets.length > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white shadow-sm">
+                    {pendingResets.length}
+                  </span>
+                )}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {mobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && user && (
+          <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-4 space-y-2.5 shadow-lg animate-fade-in">
+            <div className="px-2 py-1.5 border-b border-slate-100 mb-2">
+              <div className="text-xs font-bold text-slate-900">{user.name}</div>
+              <div className="text-[11px] text-slate-500 font-light truncate">{user.email} ({user.role})</div>
+            </div>
+            <Link
+              href="/profile"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-slate-700 hover:text-[#8B1A1A] p-2.5 rounded-lg hover:bg-red-50/50 transition border border-transparent hover:border-[#8B1A1A]/20"
+            >
+              <span>👤</span> Profil Saya
+            </Link>
+            <Link
+              href="/sheets"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-slate-700 hover:text-[#8B1A1A] p-2.5 rounded-lg hover:bg-red-50/50 transition border border-transparent hover:border-[#8B1A1A]/20"
+            >
+              <span>📊</span> Tampilan Spreadsheet
+            </Link>
+            {user.role === 'superadmin' && (
+              <Link
+                href="/manage-users"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between w-full text-xs font-semibold text-slate-700 hover:text-[#8B1A1A] p-2.5 rounded-lg hover:bg-red-50/50 transition border border-transparent hover:border-[#8B1A1A]/20"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span>👥</span> Kelola Pengguna
+                </div>
+                {pendingResets.length > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-rose-600 text-[10px] font-bold text-white">
+                    {pendingResets.length} baru
+                  </span>
+                )}
+              </Link>
+            )}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="flex items-center gap-2.5 w-full text-xs font-semibold text-rose-650 hover:text-rose-750 p-2.5 rounded-lg hover:bg-rose-50 transition border border-rose-100"
+            >
+              <span>🚪</span> Keluar
+            </button>
+          </div>
+        )}
       </header>
 
-      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-slate-900">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-slate-900">
       {/* Brand Header */}
-      <div className="text-center mb-10 relative">
+      <div className="text-center mb-8 sm:mb-10 relative overflow-hidden py-2">
         <div className="absolute inset-0 flex items-center justify-center -z-10 opacity-5">
-          <span className="font-serif text-[120px] text-[#8B1A1A] tracking-widest uppercase select-none">
+          <span className="font-serif text-[70px] sm:text-[120px] text-[#8B1A1A] tracking-widest uppercase select-none pointer-events-none">
             EE
           </span>
         </div>
-        <div className="flex justify-center mb-4">
-          <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-14 object-contain" />
+        <div className="flex justify-center mb-3 sm:mb-4">
+          <img src="/ee-logo-horizontal.svg" alt="Elevate Equity Logo" className="h-10 sm:h-14 object-contain" />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-serif text-slate-900 font-medium tracking-wide uppercase">
+        <h1 className="text-2xl sm:text-4xl font-serif text-slate-900 font-medium tracking-wide uppercase px-2">
           Portal Permohonan Variasi
         </h1>
-        <p className="text-sm text-slate-500 font-light mt-2 tracking-wider">
+        <p className="text-xs sm:text-sm text-slate-500 font-light mt-1.5 sm:mt-2 tracking-wider">
           "Elevate Equity"
         </p>
       </div>
 
       {/* Superadmin Password Reset Banner Alert */}
       {user?.role === 'superadmin' && pendingResets.length > 0 && (
-        <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm">
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm">
           <div className="flex items-center gap-3">
             <span className="text-xl">🔑</span>
             <div>
@@ -428,7 +503,7 @@ export default function Dashboard() {
           </div>
           <Link
             href="/manage-users"
-            className="text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-100 border border-amber-200 px-3.5 py-1.5 rounded transition shadow-sm"
+            className="text-xs font-bold text-amber-800 hover:text-amber-950 bg-amber-100 border border-amber-200 px-3.5 py-1.5 rounded transition shadow-sm w-full sm:w-auto text-center"
           >
             Tinjau Permintaan &rarr;
           </Link>
@@ -436,14 +511,14 @@ export default function Dashboard() {
       )}
 
       {/* Action panel */}
-      <div className="flex justify-between items-center mb-8 border-b border-[#eee] pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 border-b border-[#eee] pb-4">
         <div>
           <h2 className="text-lg font-semibold text-slate-800">Daftar Permohonan Aktif</h2>
           <p className="text-xs text-slate-500 font-light">Pantau status perubahan lingkup proyek</p>
         </div>
         <Link
           href="/new"
-          className="inline-flex items-center gap-2 bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-semibold px-5 py-2.5 rounded shadow-md transition text-sm"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#8B1A1A] hover:bg-[#C0392B] text-white font-semibold px-5 py-2.5 rounded shadow-md transition text-sm text-center"
         >
           <span>Buat Permohonan Variasi Baru</span>
         </Link>
@@ -488,111 +563,170 @@ export default function Dashboard() {
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto glass-panel-glow rounded-lg border border-slate-200 bg-[#fafafa]">
-          <table className="min-w-full divide-y divide-slate-200 text-left">
-            <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] font-semibold">
-              <tr>
-                <th className="px-6 py-4">Lokasi / ID Proyek</th>
-                <th className="px-6 py-4">Diajukan Oleh</th>
-                <th className="px-6 py-4">Tanggal</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Dampak Biaya</th>
-                <th className="px-6 py-4">Dampak Jadwal</th>
-                <th className="px-6 py-4 text-right">Tindakan</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
-              {paginatedRequests.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-slate-500 italic">
-                    Tidak ada permohonan yang sesuai dengan pencarian Anda.
-                  </td>
-                </tr>
-              ) : (
-                paginatedRequests.map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-50/70 transition bg-white">
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-900">{req.project_address}</div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">ID: {req.submission_id}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-xs font-medium">{req.submitter_name}</div>
-                      <div className="text-[10px] text-slate-500">{req.submitter_role}</div>
-                    </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
-                      {new Date(req.date_of_request).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="px-6 py-4">{getStatusBadge(req)}</td>
-                    <td className="px-6 py-4">{formatFinancialImpact(req)}</td>
-                    <td className="px-6 py-4">{formatScheduleImpact(req)}</td>
-                    <td className="px-6 py-4 text-right">
-                      {getActionLink(req)}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+          {/* Mobile Card View (< md) */}
+          <div className="block md:hidden space-y-3.5 mb-6">
+            {paginatedRequests.length === 0 ? (
+              <div className="p-6 text-center text-slate-500 italic bg-white rounded-xl border border-slate-200">
+                Tidak ada permohonan yang sesuai dengan pencarian Anda.
+              </div>
+            ) : (
+              paginatedRequests.map((req) => (
+                <div key={req.id} className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold text-slate-900 text-sm leading-snug break-words">
+                        {req.project_address}
+                      </h4>
+                      <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+                        ID: {req.submission_id}
+                      </span>
+                    </div>
+                    <div className="flex-shrink-0">
+                      {getStatusBadge(req)}
+                    </div>
+                  </div>
 
-        {/* Pagination Controls */}
-        <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div>
-              Menampilkan <strong>{filteredRequests.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</strong> hingga <strong>{Math.min(currentPage * pageSize, filteredRequests.length)}</strong> dari <strong>{filteredRequests.length}</strong> data {filteredRequests.length < requests.length && `(difilter dari total ${requests.length} data)`}
-            </div>
-            <div className="flex items-center gap-2">
-              <span>Tampilkan</span>
-              <select
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-                className="bg-white border border-slate-300 rounded px-2 py-1 text-xs focus:border-[#8B1A1A] outline-none shadow-sm cursor-pointer font-sans"
-              >
-                {[10, 15, 25].map(size => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </select>
-              <span>baris</span>
-            </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs py-2.5 border-y border-slate-100 bg-slate-50/50 -mx-4 px-4">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Diajukan Oleh</span>
+                      <span className="font-semibold text-slate-800 block truncate">{req.submitter_name}</span>
+                      <span className="text-[10px] text-slate-500 block truncate">{req.submitter_role}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">Tanggal</span>
+                      <span className="font-medium text-slate-700 block">
+                        {new Date(req.date_of_request).toLocaleDateString('id-ID')}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Dampak Biaya</span>
+                      {formatFinancialImpact(req)}
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-semibold block mb-1">Dampak Jadwal</span>
+                      {formatScheduleImpact(req)}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex justify-end">
+                    <div className="w-full text-right">
+                      {getActionLink(req)}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
-          {/* Navigation Controls */}
-          {Math.ceil(filteredRequests.length / pageSize) > 1 && (
-            <div className="flex items-center gap-1 select-none font-sans">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="inline-flex items-center justify-center px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-50 text-slate-600 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition"
-              >
-                ← Sebelumnya
-              </button>
-              {Array.from({ length: Math.ceil(filteredRequests.length / pageSize) }, (_, idx) => idx + 1).map(pageNum => (
-                <button
-                  key={pageNum}
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={`inline-flex items-center justify-center w-8 h-8 rounded border text-xs font-semibold cursor-pointer transition ${
-                    currentPage === pageNum
-                      ? 'bg-[#8B1A1A] border-[#8B1A1A] text-white shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
+          {/* Desktop Table View (>= md) */}
+          <div className="hidden md:block overflow-x-auto glass-panel-glow rounded-lg border border-slate-200 bg-[#fafafa]">
+            <table className="min-w-full divide-y divide-slate-200 text-left">
+              <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] font-semibold">
+                <tr>
+                  <th className="px-6 py-4">Lokasi / ID Proyek</th>
+                  <th className="px-6 py-4">Diajukan Oleh</th>
+                  <th className="px-6 py-4">Tanggal</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4">Dampak Biaya</th>
+                  <th className="px-6 py-4">Dampak Jadwal</th>
+                  <th className="px-6 py-4 text-right">Tindakan</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
+                {paginatedRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-10 text-center text-slate-500 italic">
+                      Tidak ada permohonan yang sesuai dengan pencarian Anda.
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedRequests.map((req) => (
+                    <tr key={req.id} className="hover:bg-slate-50/70 transition bg-white">
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-slate-900">{req.project_address}</div>
+                        <div className="text-[10px] text-slate-400 mt-0.5">ID: {req.submission_id}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-xs font-medium">{req.submitter_name}</div>
+                        <div className="text-[10px] text-slate-500">{req.submitter_role}</div>
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-500">
+                        {new Date(req.date_of_request).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="px-6 py-4">{getStatusBadge(req)}</td>
+                      <td className="px-6 py-4">{formatFinancialImpact(req)}</td>
+                      <td className="px-6 py-4">{formatScheduleImpact(req)}</td>
+                      <td className="px-6 py-4 text-right">
+                        {getActionLink(req)}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+              <div>
+                Menampilkan <strong>{filteredRequests.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</strong>-<strong>{Math.min(currentPage * pageSize, filteredRequests.length)}</strong> dari <strong>{filteredRequests.length}</strong>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>Tampilkan</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="bg-white border border-slate-300 rounded px-2 py-1 text-xs focus:border-[#8B1A1A] outline-none shadow-sm cursor-pointer font-sans"
                 >
-                  {pageNum}
-                </button>
-              ))}
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredRequests.length / pageSize)))}
-                disabled={currentPage === Math.ceil(filteredRequests.length / pageSize)}
-                className="inline-flex items-center justify-center px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-50 text-slate-600 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition"
-              >
-                Selanjutnya →
-              </button>
+                  {[10, 15, 25].map(size => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+                <span>baris</span>
+              </div>
             </div>
-          )}
-        </div>
-      </>
+
+            {/* Navigation Controls */}
+            {Math.ceil(filteredRequests.length / pageSize) > 1 && (
+              <div className="flex items-center gap-1 select-none font-sans flex-wrap justify-center">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="inline-flex items-center justify-center px-2.5 py-1.5 rounded border border-slate-200 hover:bg-slate-50 text-slate-600 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition text-xs"
+                >
+                  ←
+                </button>
+                {Array.from({ length: Math.ceil(filteredRequests.length / pageSize) }, (_, idx) => idx + 1).map(pageNum => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded border text-xs font-semibold cursor-pointer transition ${
+                      currentPage === pageNum
+                        ? 'bg-[#8B1A1A] border-[#8B1A1A] text-white shadow-sm'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredRequests.length / pageSize)))}
+                  disabled={currentPage === Math.ceil(filteredRequests.length / pageSize)}
+                  className="inline-flex items-center justify-center px-2.5 py-1.5 rounded border border-slate-200 hover:bg-slate-50 text-slate-600 disabled:opacity-50 disabled:hover:bg-transparent font-medium cursor-pointer transition text-xs"
+                >
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+        </>
       )}
       </div>
 
