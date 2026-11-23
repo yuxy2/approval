@@ -303,7 +303,10 @@ export async function saveRequest(requestData) {
         });
       }
     } catch (err) {
-      console.error('Prisma error in saveRequest, falling back to JSON:', err);
+      console.error('Prisma error in saveRequest:', err);
+      if (process.env.DATABASE_URL) {
+        throw new Error('Database error saving request: ' + (err.message || err));
+      }
     }
   }
 

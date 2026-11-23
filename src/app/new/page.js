@@ -164,7 +164,7 @@ function SubmitterFormContent() {
       submitterName,
       submitterRole,
       submitterEmail,
-      pmId: parseInt(pmId, 10),
+      pmId: pmId,
       clientEmail,
       description,
       reason,
