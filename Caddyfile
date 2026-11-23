@@ -1,0 +1,3 @@
+43-173-20-217.sslip.io {
+    reverse_proxy web:3000
+}

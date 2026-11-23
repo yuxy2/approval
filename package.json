@@ -1,0 +1,35 @@
+{
+  "name": "form_aproval",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.3",
+    "mongodb": "^7.9.1",
+    "next": "16.2.7",
+    "nodemailer": "^8.0.10",
+    "pdfkit": "^0.19.1",
+    "prisma": "^6.19.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "resend": "^6.12.4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.7",
+    "postcss": "^8.5.15",
+    "ssh2": "^1.17.0",
+    "tailwindcss": "^3.4.19"
+  }
+}

@@ -1,0 +1,97 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model pm_users {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  email              String               @unique
+  active             Boolean              @default(true)
+  password           String?
+  role               String               @default("pm")
+  variation_requests variation_requests[]
+}
+
+model variation_requests {
+  id                    String            @id @default(auto()) @map("_id") @db.ObjectId
+  submission_id         String            @unique
+  project_address       String
+  date_of_request       DateTime
+  submitter_name        String
+  submitter_email       String
+  submitter_role        String
+  description           String
+  reason                String
+  project_impact        String
+  submitter_notes       String?
+  pm_id                 String            @db.ObjectId
+  pm_user               pm_users          @relation(fields: [pm_id], references: [id])
+  client_email          String
+  status                String            // PENDING_PM, PENDING_CLIENT, REJECTED_TO_SUBMITTER, REJECTED_TO_PM, APPROVED
+  contractor_attachment String?
+  prm_attachment        String?
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @default(now()) @updatedAt
+  workflow_events       workflow_events[]
+  notifications         notifications[]
+}
+
+model workflow_events {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  request_id        String             @db.ObjectId
+  variation_request variation_requests @relation(fields: [request_id], references: [id], onDelete: Cascade)
+  step_type         String             // submission, pm_review, client_review
+  action            String             // submit, approve, reject, revise
+  actor_email       String
+  
+  // PM assessment fields
+  financial_impact  String?            // increase, decrease, none
+  financial_amount  Float?
+  schedule_impact   String?            // adds, reduces, none
+  schedule_days     Int?
+  company_rep_name  String?
+  company_approved  Boolean?
+  pm_notes          String?
+  
+  // Client sign-off fields
+  client_agreed     Boolean?
+  client_name       String?
+  client_date       DateTime?
+  
+  // Signature image base64 format stored as Text
+  signature_image   String?
+
+  created_at        DateTime           @default(now())
+}
+
+model notifications {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  request_id        String             @db.ObjectId
+  variation_request variation_requests @relation(fields: [request_id], references: [id], onDelete: Cascade)
+  recipient_email   String
+  type              String             // PM_REVIEW, CLIENT_SIGN_OFF, STATUS_UPDATE, FINAL_APPROVAL
+  unique_token      String             @unique
+  subject           String
+  body              String
+  link              String
+  expires_at        DateTime?
+  sent_at           DateTime           @default(now())
+}
+
+model password_reset_requests {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  email             String
+  name              String?
+  status            String             @default("PENDING") // PENDING, APPROVED, REJECTED
+  user_id           String?
+  role              String?
+  processed_at      DateTime?
+  processed_by      String?
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @default(now()) @updatedAt
+}

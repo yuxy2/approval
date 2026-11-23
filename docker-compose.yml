@@ -1,0 +1,65 @@
+services:
+  # Automatic HTTPS (SSL) Reverse Proxy
+  caddy:
+    image: caddy:alpine
+    container_name: ee_form_approval_caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+  # PostgreSQL Database Service
+  db:
+    image: postgres:16-alpine
+    container_name: ee_form_approval_db
+    restart: always
+    environment:
+      POSTGRES_DB: form_approval
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Adminas2026!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d form_approval"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  # Next.js Web Application Service
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ee_form_approval_web
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3060:3000"
+    environment:
+      # Connect to local PostgreSQL container on the Docker network
+      DATABASE_URL: "postgresql://postgres:Adminas2026!@db:5432/form_approval?schema=public"
+      
+      # SMTP Configuration Settings
+      SMTP_HOST: "smtp.gmail.com"
+      SMTP_PORT: 587
+      SMTP_USER: "yusaufcok@gmail.com"
+      SMTP_PASSWORD: "bhqnndzthjllpjka"
+      EMAIL_FROM: "Elevate Equity Form Approval <yusaufcok@gmail.com>"
+      
+      # Domain aplikasi produksi dengan SSL HTTPS aktif
+      NEXT_PUBLIC_APP_URL: "https://43-173-20-217.sslip.io"
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
