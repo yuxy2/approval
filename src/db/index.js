@@ -73,20 +73,22 @@ export function writeDb(data) {
   }
 }
 
-// Track whether we have detected database connection capability
 let dbMode = 'unknown'; // 'prisma' or 'json'
 
 async function getDbMode() {
-  if (dbMode !== 'unknown') return dbMode;
+  if (dbMode === 'prisma') return 'prisma';
   try {
     await prisma.$connect();
     dbMode = 'prisma';
-    console.log('Database Mode: connected to MongoDB via Prisma.');
+    return 'prisma';
   } catch (err) {
-    console.warn('Database Mode: Prisma MongoDB connection failed. Falling back to local JSON database.', err.message);
-    dbMode = 'json';
+    console.error('Database Mode: Prisma MongoDB connection failed:', err);
+    // When DATABASE_URL is provided (production/Vercel), always use Prisma so requests go to MongoDB Atlas
+    if (process.env.DATABASE_URL) {
+      return 'prisma';
+    }
+    return 'json';
   }
-  return dbMode;
 }
 
 // Get all requests

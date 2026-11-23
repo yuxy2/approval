@@ -16,9 +16,8 @@ export async function GET() {
       list = list.filter(req => String(req.pm_id) === String(session.userId));
     } else if (session.role === 'contractor') {
       list = list.filter(req => req.submitter_email.toLowerCase() === session.email.toLowerCase());
-    } else if (session.role === 'superadmin') {
-      list = list.filter(req => req.submitter_email.toLowerCase() === session.email.toLowerCase());
     }
+    // Role 'superadmin' sees all variation requests across the system
     
     return NextResponse.json(list);
   } catch (error) {
